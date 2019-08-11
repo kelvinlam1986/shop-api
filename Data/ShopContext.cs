@@ -6,6 +6,8 @@ namespace ShopApi.Data {
     public class ShopContext : IdentityDbContext<ApplicationUser> {
         public ShopContext (DbContextOptions<ShopContext> options) : base (options) { }
 
+        public DbSet<Branch> Branches { get; set; }
+
         protected override void OnModelCreating (ModelBuilder builder) {
             base.OnModelCreating (builder);
             builder.Entity<ApplicationUser> (entity => entity.Property (m => m.Id)

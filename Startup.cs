@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +15,9 @@ using Microsoft.IdentityModel.Tokens;
 using ShopApi.Data;
 using ShopApi.Jwt;
 using ShopApi.Models;
+using ShopApi.Repositories;
 using ShopApi.Services;
+using ShopApi.ViewModels;
 
 namespace ShopApi
 {
@@ -50,13 +54,29 @@ namespace ShopApi
             });
 
             services.AddMvc();
+            services.AddApiVersioning(o =>
+            {
+                o.AssumeDefaultVersionWhenUnspecified = true;
+                o.DefaultApiVersion = new ApiVersion(new DateTime(2016, 7, 1));
+            });
+
+            services.AddScoped<IBranchRepository, BranchRepository>();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Branch, BranchViewModel>();
+            });
+
             // Add ApplicationDbContext's DbSeeder
             services.AddSingleton<DbSeeder>();
+
+            var mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
+            services.AddSingleton(provider => Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
