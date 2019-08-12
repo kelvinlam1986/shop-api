@@ -1,3 +1,4 @@
+using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +10,7 @@ namespace ShopApi.Controllers
 {
 
     [ApiVersion("1.0")]
-    [Route("/api/v{version:apiVersion}/branchs")]
+    [Route("/api/v{version:apiVersion}/branch")]
     [Produces("application/json")]
     public class BranchController : Controller
     {
@@ -28,11 +29,28 @@ namespace ShopApi.Controllers
             this._configuration = configuration;
         }
 
-        [HttpGet("default")]
-        public IActionResult GetDefaultBranch()
+        [HttpGet("")]
+        public IActionResult GetBranch()
         {
-            var yourBranchName = this._configuration["Branch"];
-            var branch = this._repository.GetBranchByName(yourBranchName);
+            int defaultBranchId = Convert.ToInt32(this._configuration["Branch"]);
+            var branch = this._repository.GetBranchById(defaultBranchId);
+            if (branch == null)
+            {
+                return NotFound(new ErrorViewModel
+                {
+                    ErrorCode = "404",
+                    ErrorMessage = "Không tìm thấy dữ liệu"
+                });
+            }
+
+            var defaultBranch = this._mapper.Map<Branch, BranchViewModel>(branch);
+            return Ok(defaultBranch);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetBranch(int id)
+        {
+            var branch = this._repository.GetBranchById(id);
             if (branch == null)
             {
                 return NotFound(new ErrorViewModel
