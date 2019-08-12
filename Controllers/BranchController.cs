@@ -1,5 +1,6 @@
 using System;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using ShopApi.Models;
@@ -30,6 +31,7 @@ namespace ShopApi.Controllers
         }
 
         [HttpGet("")]
+        [Authorize]
         public IActionResult GetBranch()
         {
             int defaultBranchId = Convert.ToInt32(this._configuration["Branch"]);
@@ -48,6 +50,7 @@ namespace ShopApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public IActionResult GetBranch(int id)
         {
             var branch = this._repository.GetBranchById(id);
