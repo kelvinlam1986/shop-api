@@ -13,16 +13,5 @@ namespace ShopApi.Controllers
         {
             this._signInManager = signInManager;
         }
-
-        [HttpPost("Signout")]
-        public IActionResult SignOut()
-        {
-            if (HttpContext.User.Identity.IsAuthenticated)
-            {
-                this._signInManager.SignOutAsync().Wait();
-            }
-
-            return Ok();
-        }
     }
 }
