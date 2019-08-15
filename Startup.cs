@@ -61,6 +61,7 @@ namespace ShopApi
             });
 
             services.AddScoped<IBranchRepository, BranchRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -69,6 +70,7 @@ namespace ShopApi
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Branch, BranchViewModel>();
+                cfg.CreateMap<Category, CategoryViewModel>();
             });
 
             // Add ApplicationDbContext's DbSeeder
