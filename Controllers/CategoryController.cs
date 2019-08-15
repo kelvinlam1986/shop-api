@@ -40,7 +40,8 @@ namespace ShopApi.Controllers
             pagingVm.Items = categoriesVm;
             pagingVm.Page = page;
             pagingVm.TotalCount = totalRow;
-            pagingVm.TotalPage = (int)Math.Ceiling((decimal)(totalRow / pageSize));
+            pagingVm.TotalPage = (int)Math.Ceiling(((decimal)totalRow / pageSize));
+            pagingVm.MaxPage = pagingVm.TotalPage - 1;
             return Ok(pagingVm);
         }
     }
