@@ -46,6 +46,7 @@ namespace ShopApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public IActionResult Put(int id, [FromBody]CategoryUpdateDTO category)
         {
             if (category == null)
