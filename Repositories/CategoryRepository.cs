@@ -68,5 +68,10 @@ namespace ShopApi.Repositories
                 return false;
             }
         }
+
+        public bool CheckExistingCategory(int id, string name)
+        {
+            return this._context.Categories.Any(x => x.Name == name && x.Id != id);
+        }
     }
 }

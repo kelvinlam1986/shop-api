@@ -80,6 +80,16 @@ namespace ShopApi.Controllers
                 });
             }
 
+            bool isExisting = this._categoryRepository.CheckExistingCategory(0, category.Name);
+            if (isExisting)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Tên loại sản phẩm này đã tồn tại."
+                });
+            }
+
             categoryToUpdate.Name = category.Name;
             categoryToUpdate.UpdatedBy = "admin";
             categoryToUpdate.UpdatedDate = DateTime.Now;
@@ -121,6 +131,17 @@ namespace ShopApi.Controllers
                 return BadRequest(errorViewModel);
             }
 
+
+            bool isExisting = this._categoryRepository.CheckExistingCategory(0, category.Name);
+            if (isExisting)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Tên loại sản phẩm này đã tồn tại."
+                });
+            }
+
             var newCategory = new Category
             {
                 Name = category.Name,
@@ -141,35 +162,6 @@ namespace ShopApi.Controllers
             }
 
             return Ok(newCategory);
-        }
-
-        private string ConstructErrorMessages(ModelStateDictionary modelState)
-        {
-            foreach (var keyModelStatePair in modelState)
-            {
-                var key = keyModelStatePair.Key;
-                var errors = keyModelStatePair.Value.Errors;
-                if (errors != null && errors.Count > 0)
-                {
-                    string errorMessage = "";
-                    if (errors.Count == 1)
-                    {
-                        errorMessage = errors[0].ErrorMessage;
-                        return errorMessage;
-                    }
-                    else
-                    {
-                        var errorMessages = new string[errors.Count];
-                        for (var i = 0; i < errors.Count; i++)
-                        {
-                            errorMessages[i] = errors[i].ErrorMessage;
-                        }
-
-                        return string.Join(" ", errorMessages);
-                    }
-                }
-            }
-            return "";
         }
     }
 }
