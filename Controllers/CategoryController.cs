@@ -44,5 +44,46 @@ namespace ShopApi.Controllers
             pagingVm.MaxPage = pagingVm.TotalPage - 1;
             return Ok(pagingVm);
         }
+
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody]CategoryUpdateDTO category)
+        {
+            if (category == null)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Thông tin cung cấp không chính xác."
+                });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var categoryToUpdate = this._categoryRepository.GetById(id);
+            if (categoryToUpdate == null)
+            {
+                return NotFound(new ErrorViewModel
+                {
+                    ErrorCode = "404",
+                    ErrorMessage = "Loại sản phẩm cần cập nhật không tìm thấy"
+                });
+            }
+
+            categoryToUpdate.Name = category.Name;
+            bool isSuccess = this._categoryRepository.Update(categoryToUpdate);
+            if (isSuccess == false)
+            {
+                return StatusCode(500, new ErrorViewModel
+                {
+                    ErrorCode = "500",
+                    ErrorMessage = "Có lỗi trong quá trình cập nhật dữ liệu."
+                });
+            }
+
+            return NoContent();
+        }
     }
 }

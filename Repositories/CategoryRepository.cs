@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ShopApi.Data;
@@ -33,6 +34,26 @@ namespace ShopApi.Repositories
                         .Take(pageSize);
 
             return query.ToList();
+        }
+
+        public Category GetById(int id)
+        {
+            return this._context.Categories.Find(id);
+        }
+
+        public bool Update(Category category)
+        {
+            try
+            {
+                this._context.Update(category);
+                int rowEffected = this._context.SaveChanges();
+                return rowEffected == 1;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
         }
     }
 }
