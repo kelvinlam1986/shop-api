@@ -84,7 +84,7 @@ namespace ShopApi.Controllers
                 });
             }
 
-            return NoContent();
+            return Ok(categoryToUpdate);
         }
     }
 }
