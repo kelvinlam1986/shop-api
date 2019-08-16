@@ -4,6 +4,7 @@ using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using ShopApi.Infrastructure.Core;
 using ShopApi.Models;
 using ShopApi.Repositories;
@@ -60,7 +61,13 @@ namespace ShopApi.Controllers
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                var errorViewModel = new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = ModelState.ToErrorMessages()
+                };
+
+                return BadRequest(errorViewModel);
             }
 
             var categoryToUpdate = this._categoryRepository.GetById(id);
@@ -74,6 +81,9 @@ namespace ShopApi.Controllers
             }
 
             categoryToUpdate.Name = category.Name;
+            categoryToUpdate.UpdatedBy = "admin";
+            categoryToUpdate.UpdatedDate = DateTime.Now;
+
             bool isSuccess = this._categoryRepository.Update(categoryToUpdate);
             if (isSuccess == false)
             {
@@ -85,6 +95,81 @@ namespace ShopApi.Controllers
             }
 
             return Ok(categoryToUpdate);
+        }
+
+        [HttpPost("")]
+        [Authorize]
+        public IActionResult Post([FromBody]CategoryAddDTO category)
+        {
+            if (category == null)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Thông tin cung cấp không chính xác."
+                });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var errorViewModel = new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = ModelState.ToErrorMessages()
+                };
+
+                return BadRequest(errorViewModel);
+            }
+
+            var newCategory = new Category
+            {
+                Name = category.Name,
+                CreatedBy = "admin",
+                CreatedDate = DateTime.Now,
+                UpdatedBy = "admin",
+                UpdatedDate = DateTime.Now
+            };
+
+            bool isSuccess = this._categoryRepository.Insert(newCategory);
+            if (isSuccess == false)
+            {
+                return StatusCode(500, new ErrorViewModel
+                {
+                    ErrorCode = "500",
+                    ErrorMessage = "Có lỗi trong quá trình cập nhật dữ liệu."
+                });
+            }
+
+            return Ok(newCategory);
+        }
+
+        private string ConstructErrorMessages(ModelStateDictionary modelState)
+        {
+            foreach (var keyModelStatePair in modelState)
+            {
+                var key = keyModelStatePair.Key;
+                var errors = keyModelStatePair.Value.Errors;
+                if (errors != null && errors.Count > 0)
+                {
+                    string errorMessage = "";
+                    if (errors.Count == 1)
+                    {
+                        errorMessage = errors[0].ErrorMessage;
+                        return errorMessage;
+                    }
+                    else
+                    {
+                        var errorMessages = new string[errors.Count];
+                        for (var i = 0; i < errors.Count; i++)
+                        {
+                            errorMessages[i] = errors[i].ErrorMessage;
+                        }
+
+                        return string.Join(" ", errorMessages);
+                    }
+                }
+            }
+            return "";
         }
     }
 }

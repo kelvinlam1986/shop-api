@@ -55,5 +55,18 @@ namespace ShopApi.Repositories
             }
 
         }
+        public bool Insert(Category category)
+        {
+            try
+            {
+                this._context.Add(category);
+                int rowEffected = this._context.SaveChanges();
+                return rowEffected == 1;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }
