@@ -41,7 +41,10 @@ namespace ShopApi
             services.AddDbContext<ShopContext>(options =>
                options.UseMySql(Configuration.GetConnectionString("MySQLConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(option =>
+            {
+                option.Cookies.ApplicationCookie.AutomaticChallenge = false;
+            })
                 .AddEntityFrameworkStores<ShopContext>()
                 .AddDefaultTokenProviders();
 

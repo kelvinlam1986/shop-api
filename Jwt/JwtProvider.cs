@@ -36,7 +36,7 @@ namespace ShopApi.Jwt
         {
             this._next = next;
             // Instantiate JWT-related members
-            this._tokenExpiration = TimeSpan.FromMinutes(10);
+            this._tokenExpiration = TimeSpan.FromMinutes(1);
             this._signingCredential = new SigningCredentials(SecurityKey,
             SecurityAlgorithms.HmacSha256);
 
