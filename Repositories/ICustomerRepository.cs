@@ -5,6 +5,6 @@ namespace ShopApi.Repositories
 {
     public interface ICustomerRepository
     {
-        IEnumerable<Customer> GetAll(string keyword, int page, int pageSize, out int totalRow);
+        IEnumerable<Customer> GetAll(int branchId, string keyword, int page, int pageSize, out int totalRow);
     }
 }

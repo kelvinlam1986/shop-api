@@ -65,6 +65,7 @@ namespace ShopApi
 
             services.AddScoped<IBranchRepository, BranchRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -74,6 +75,7 @@ namespace ShopApi
             {
                 cfg.CreateMap<Branch, BranchViewModel>();
                 cfg.CreateMap<Category, CategoryViewModel>();
+                cfg.CreateMap<Customer, CustomerViewModel>();
             });
 
             // Add ApplicationDbContext's DbSeeder
