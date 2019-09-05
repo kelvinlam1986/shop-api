@@ -51,5 +51,70 @@ namespace ShopApi.Controllers
             pagingVm.MaxPage = pagingVm.TotalPage - 1;
             return Ok(pagingVm);
         }
+
+        [HttpPut("{id}")]
+        [Authorize]
+        public IActionResult Put(int id, [FromBody]CustomerUpdateDTO customer)
+        {
+            if (customer == null)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Thông tin cung cấp không chính xác."
+                });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var errorViewModel = new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = ModelState.ToErrorMessages()
+                };
+
+                return BadRequest(errorViewModel);
+            }
+
+            var customerToUpdate = this._customerRepository.GetById(id);
+            if (customerToUpdate == null)
+            {
+                return NotFound(new ErrorViewModel
+                {
+                    ErrorCode = "404",
+                    ErrorMessage = "Khách hàng cần cập nhật không tìm thấy"
+                });
+            }
+
+            bool isExisting = this._customerRepository.CheckExistingCustomer(
+                id, customer.FirstName, customer.LastName);
+            if (isExisting)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Họ và tên khách hàng này đã tồn tại."
+                });
+            }
+
+            customerToUpdate.FirstName = customer.FirstName;
+            customerToUpdate.LastName = customer.LastName;
+            customerToUpdate.Address = customer.Address;
+            customerToUpdate.Contact = customer.Contact;
+            customerToUpdate.UpdatedBy = "admin";
+            customerToUpdate.UpdatedDate = DateTime.Now;
+
+            bool isSuccess = this._customerRepository.Update(customerToUpdate);
+            if (isSuccess == false)
+            {
+                return StatusCode(500, new ErrorViewModel
+                {
+                    ErrorCode = "500",
+                    ErrorMessage = "Có lỗi trong quá trình cập nhật dữ liệu."
+                });
+            }
+
+            return Ok(customerToUpdate);
+        }
     }
 }

@@ -45,7 +45,7 @@ namespace ShopApi.Repositories
         {
             try
             {
-                this._context.Update(category);
+                this._context.Categories.Update(category);
                 int rowEffected = this._context.SaveChanges();
                 return rowEffected == 1;
             }
@@ -59,7 +59,7 @@ namespace ShopApi.Repositories
         {
             try
             {
-                this._context.Add(category);
+                this._context.Categories.Add(category);
                 int rowEffected = this._context.SaveChanges();
                 return rowEffected == 1;
             }

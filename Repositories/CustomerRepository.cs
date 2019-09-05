@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ShopApi.Data;
@@ -33,6 +34,43 @@ namespace ShopApi.Repositories
                         .Take(pageSize);
 
             return query.ToList();
+        }
+
+        public Customer GetById(int id)
+        {
+            return this._context.Customers.Find(id);
+        }
+
+        public bool Update(Customer customer)
+        {
+            try
+            {
+                this._context.Customers.Update(customer);
+                int rowEffected = this._context.SaveChanges();
+                return rowEffected == 1;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public bool Insert(Customer customer)
+        {
+            try
+            {
+                this._context.Customers.Add(customer);
+                int rowEffected = this._context.SaveChanges();
+                return rowEffected == 1;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool CheckExistingCustomer(int id, string firstName, string lastName)
+        {
+            return this._context.Customers.Any(x => x.FirstName == firstName && x.LastName == lastName && x.Id != id);
         }
     }
 }

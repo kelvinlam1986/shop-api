@@ -80,7 +80,7 @@ namespace ShopApi.Controllers
                 });
             }
 
-            bool isExisting = this._categoryRepository.CheckExistingCategory(0, category.Name);
+            bool isExisting = this._categoryRepository.CheckExistingCategory(id, category.Name);
             if (isExisting)
             {
                 return BadRequest(new ErrorViewModel
