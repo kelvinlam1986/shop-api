@@ -159,6 +159,77 @@ namespace ShopApi.Data
                 await this._dbContext.SaveChangesAsync();
             }
 
+            if (await this._dbContext.Suppliers.CountAsync() == 0)
+            {
+                var branch = await this._dbContext.Branches.FirstOrDefaultAsync();
+                this._dbContext.Suppliers.Add(new Supplier
+                {
+                    Name = "Minh Hằng",
+                    CreatedBy = "admin",
+                    CreatedDate = DateTime.Now,
+                    UpdatedBy = "admin",
+                    UpdatedDate = DateTime.Now,
+                    BranchId = branch.Id
+                });
+
+                this._dbContext.Suppliers.Add(new Supplier
+                {
+                    Name = "Thu Thủy",
+                    CreatedBy = "admin",
+                    CreatedDate = DateTime.Now,
+                    UpdatedBy = "admin",
+                    UpdatedDate = DateTime.Now,
+                    BranchId = branch.Id
+                });
+
+                await this._dbContext.SaveChangesAsync();
+            }
+
+            if (await this._dbContext.Products.CountAsync() == 0)
+            {
+                var branch = await this._dbContext.Branches.FirstOrDefaultAsync();
+                var category = await this._dbContext.Categories.FirstOrDefaultAsync();
+                var supplier = await this._dbContext.Suppliers.FirstOrDefaultAsync();
+
+                this._dbContext.Products.Add(new Product
+                {
+                    Name = "Hàng hóa 01",
+                    Serial = "HH001",
+                    Description = "Hàng hóa 01",
+                    CategoryId = category.Id,
+                    Price = 100,
+                    Picture = "default.gif",
+                    Quantity = 10,
+                    ReOrder = 20,
+                    SupplierId = supplier.Id,
+                    CreatedBy = "admin",
+                    CreatedDate = DateTime.Now,
+                    UpdatedBy = "admin",
+                    UpdatedDate = DateTime.Now,
+                    BranchId = branch.Id
+                });
+
+                this._dbContext.Products.Add(new Product
+                {
+                    Name = "Hàng hóa 02",
+                    Serial = "HH002",
+                    Description = "Hàng hóa 02",
+                    CategoryId = category.Id,
+                    Price = 200,
+                    Picture = "default.gif",
+                    Quantity = 100,
+                    ReOrder = 5,
+                    SupplierId = supplier.Id,
+                    CreatedBy = "admin",
+                    CreatedDate = DateTime.Now,
+                    UpdatedBy = "admin",
+                    UpdatedDate = DateTime.Now,
+                    BranchId = branch.Id
+                });
+
+                await this._dbContext.SaveChangesAsync();
+            }
+
         }
 
         private async Task CreateUserAsync()
