@@ -11,5 +11,6 @@ namespace ShopApi.ViewModels
         public decimal Price { get; set; }
         public string CategoryName { get; set; }
         public int Reorder { get; set; }
+        public string Picture { get; set; }
     }
 }
