@@ -165,6 +165,8 @@ namespace ShopApi.Data
                 this._dbContext.Suppliers.Add(new Supplier
                 {
                     Name = "Minh Hằng",
+                    Address = "143 Trần Hưng Đạo Q.1 TP.HCM",
+                    Contact = "0902305229",
                     CreatedBy = "admin",
                     CreatedDate = DateTime.Now,
                     UpdatedBy = "admin",
@@ -175,6 +177,8 @@ namespace ShopApi.Data
                 this._dbContext.Suppliers.Add(new Supplier
                 {
                     Name = "Thu Thủy",
+                    Address = "145 Lý Tự Trọng Q1 TP.HCM",
+                    Contact = "094967342",
                     CreatedBy = "admin",
                     CreatedDate = DateTime.Now,
                     UpdatedBy = "admin",

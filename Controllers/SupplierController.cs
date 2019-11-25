@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ShopApi.Infrastructure.Core;
 using ShopApi.Models;
 using ShopApi.Repositories;
 using ShopApi.ViewModels;
@@ -20,6 +22,34 @@ namespace ShopApi.Controllers
         {
             this._supplierRepository = supplierRepository;
             this._mapper = mapper;
+        }
+
+        [HttpGet("")]
+        [Authorize]
+        public IActionResult GetAll(int branchId, string keyword = "", int page = 0, int pageSize = 20)
+        {
+            if (branchId == 0)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Bạn phải cung cấp BranchId"
+                });
+            }
+
+            int totalRow = 0;
+            var suppliers = this._supplierRepository.GetAll(branchId,
+                keyword, page, pageSize, out totalRow);
+
+            var suppliersVm =
+               this._mapper.Map<IEnumerable<Supplier>, IEnumerable<SupplierViewModel>>(suppliers);
+            var pagingVm = new PaginationSet<SupplierViewModel>();
+            pagingVm.Items = suppliersVm;
+            pagingVm.Page = page;
+            pagingVm.TotalCount = totalRow;
+            pagingVm.TotalPage = (int)Math.Ceiling(((decimal)totalRow / pageSize));
+            pagingVm.MaxPage = pagingVm.TotalPage - 1;
+            return Ok(pagingVm);
         }
 
         [HttpGet("all")]

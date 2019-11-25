@@ -82,6 +82,7 @@ namespace ShopApi
                     .ForMember(x => x.CategoryName, opt => opt.MapFrom(x => x.Category.Name))
                     .ForMember(x => x.SupplierName, opt => opt.MapFrom(x => x.Supplier.Name));
                 cfg.CreateMap<Supplier, SupplierSelectionViewModel>();
+                cfg.CreateMap<Supplier, SupplierViewModel>();
             });
 
             // Add ApplicationDbContext's DbSeeder
