@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,40 @@ namespace ShopApi.Repositories
                         .Take(pageSize);
 
             return query.ToList();
+        }
+
+        public Product GetById(int id)
+        {
+            return this._context.Products.Find(id);
+        }
+
+        public bool CheckExistingProduct(int id, string serial, string name)
+        {
+            bool isExisting = this._context.Products.Any(x => x.Serial == serial && x.Id != id);
+            if (isExisting)
+            {
+                return isExisting;
+            }
+            else
+            {
+                isExisting = this._context.Products.Any(x => x.Name == name && x.Id != id);
+            }
+
+            return isExisting;
+        }
+
+        public bool Update(Product product)
+        {
+            try
+            {
+                this._context.Products.Update(product);
+                int rowEffected = this._context.SaveChanges();
+                return rowEffected == 1;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

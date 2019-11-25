@@ -51,5 +51,74 @@ namespace ShopApi.Controllers
             pagingVm.MaxPage = pagingVm.TotalPage - 1;
             return Ok(pagingVm);
         }
+
+        [HttpPut("{id}")]
+        [Authorize]
+        public IActionResult Put(int id, [FromBody]ProductUpdateDTO product)
+        {
+            if (product == null)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Thông tin cung cấp không chính xác."
+                });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var errorViewModel = new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = ModelState.ToErrorMessages()
+                };
+
+                return BadRequest(errorViewModel);
+            }
+
+            var productToUpdate = this._productRepository.GetById(id);
+            if (productToUpdate == null)
+            {
+                return NotFound(new ErrorViewModel
+                {
+                    ErrorCode = "404",
+                    ErrorMessage = "Sản phẩm cần cập nhật không tìm thấy"
+                });
+            }
+
+            bool isExisting = this._productRepository.CheckExistingProduct(
+                id, product.Serial, product.Name);
+            if (isExisting)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Mã sản phẩm hoặc Tên sản phẩm này đã tồn tại."
+                });
+            }
+
+            productToUpdate.Serial = product.Serial;
+            productToUpdate.Name = product.Name;
+            productToUpdate.Description = product.Description;
+            productToUpdate.CategoryId = product.CategoryId;
+            productToUpdate.SupplierId = product.SupplierId;
+            productToUpdate.Price = product.Price;
+            productToUpdate.ReOrder = product.ReOrder;
+            productToUpdate.UpdatedBy = "admin";
+            productToUpdate.UpdatedDate = DateTime.Now;
+
+            bool isSuccess = this._productRepository.Update(productToUpdate);
+            if (isSuccess == false)
+            {
+                return StatusCode(500, new ErrorViewModel
+                {
+                    ErrorCode = "500",
+                    ErrorMessage = "Có lỗi trong quá trình cập nhật dữ liệu."
+                });
+            }
+
+            return Ok(productToUpdate);
+        }
+
     }
 }
