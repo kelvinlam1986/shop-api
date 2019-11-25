@@ -10,5 +10,6 @@ namespace ShopApi.Repositories
         bool Update(Category category);
         bool Insert(Category category);
         bool CheckExistingCategory(int id, string name);
+        IEnumerable<Category> GetAllWithoutPaging();
     }
 }

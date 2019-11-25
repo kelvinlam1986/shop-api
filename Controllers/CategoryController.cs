@@ -46,6 +46,15 @@ namespace ShopApi.Controllers
             return Ok(pagingVm);
         }
 
+        [HttpGet("all")]
+        [Authorize]
+        public IActionResult GetAllWithoutPaging()
+        {
+            var categories = this._categoryRepository.GetAllWithoutPaging();
+            var categoriesVm = this._mapper.Map<IEnumerable<Category>, IEnumerable<CategoryViewModel>>(categories);
+            return Ok(categoriesVm);
+        }
+
         [HttpPut("{id}")]
         [Authorize]
         public IActionResult Put(int id, [FromBody]CategoryUpdateDTO category)

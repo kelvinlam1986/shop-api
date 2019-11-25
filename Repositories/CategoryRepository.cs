@@ -73,5 +73,10 @@ namespace ShopApi.Repositories
         {
             return this._context.Categories.Any(x => x.Name == name && x.Id != id);
         }
+
+        public IEnumerable<Category> GetAllWithoutPaging()
+        {
+            return this._context.Categories.ToList();
+        }
     }
 }
