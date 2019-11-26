@@ -70,5 +70,70 @@ namespace ShopApi.Controllers
 
             return Ok(suppliersVm);
         }
+
+        [HttpPut("{id}")]
+        [Authorize]
+        public IActionResult Put(int id, [FromBody]SupplierUpdateDTO supplier)
+        {
+            if (supplier == null)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Thông tin cung cấp không chính xác."
+                });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var errorViewModel = new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = ModelState.ToErrorMessages()
+                };
+
+                return BadRequest(errorViewModel);
+            }
+
+            var supplierToUpdate = this._supplierRepository.GetById(id);
+            if (supplierToUpdate == null)
+            {
+                return NotFound(new ErrorViewModel
+                {
+                    ErrorCode = "404",
+                    ErrorMessage = "Khách hàng cần cập nhật không tìm thấy"
+                });
+            }
+
+            bool isExisting = this._supplierRepository.CheckExistingSupplier(
+                id, supplier.Name);
+            if (isExisting)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Tên nhà cung cấp này đã tồn tại."
+                });
+            }
+
+            supplierToUpdate.Name = supplier.Name;
+            supplierToUpdate.Address = supplier.Address;
+            supplierToUpdate.Contact = supplier.Contact;
+            supplierToUpdate.UpdatedBy = "admin";
+            supplierToUpdate.UpdatedDate = DateTime.Now;
+
+            bool isSuccess = this._supplierRepository.Update(supplierToUpdate);
+            if (isSuccess == false)
+            {
+                return StatusCode(500, new ErrorViewModel
+                {
+                    ErrorCode = "500",
+                    ErrorMessage = "Có lỗi trong quá trình cập nhật dữ liệu."
+                });
+            }
+
+            return Ok(supplierToUpdate);
+        }
+
     }
 }

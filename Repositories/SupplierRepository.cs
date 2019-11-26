@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ShopApi.Data;
@@ -37,6 +38,30 @@ namespace ShopApi.Repositories
                         .Take(pageSize);
 
             return query.ToList();
+        }
+
+        public Supplier GetById(int id)
+        {
+            return this._context.Suppliers.Find(id);
+        }
+
+        public bool CheckExistingSupplier(int id, string name)
+        {
+            return this._context.Suppliers.Any(x => x.Name == name && x.Id != id);
+        }
+
+        public bool Update(Supplier supplier)
+        {
+            try
+            {
+                this._context.Suppliers.Update(supplier);
+                int rowEffected = this._context.SaveChanges();
+                return rowEffected == 1;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
