@@ -10,5 +10,6 @@ namespace ShopApi.Repositories
         Supplier GetById(int id);
         bool CheckExistingSupplier(int id, string name);
         bool Update(Supplier supplier);
+        bool Insert(Supplier supplier);
     }
 }

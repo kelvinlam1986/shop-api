@@ -135,5 +135,63 @@ namespace ShopApi.Controllers
             return Ok(supplierToUpdate);
         }
 
+        [HttpPost("")]
+        [Authorize]
+        public IActionResult Post([FromBody]SupplierAddDTO supplier)
+        {
+            if (supplier == null)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Thông tin cung cấp không chính xác."
+                });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var errorViewModel = new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = ModelState.ToErrorMessages()
+                };
+
+                return BadRequest(errorViewModel);
+            }
+
+            bool isExisting = this._supplierRepository.CheckExistingSupplier(0, supplier.Name);
+            if (isExisting)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Tên nhà cung cấp này đã tồn tại."
+                });
+            }
+
+            var newSupplier = new Supplier
+            {
+                Name = supplier.Name,
+                Address = supplier.Address,
+                Contact = supplier.Contact,
+                BranchId = supplier.BranchId,
+                CreatedBy = "admin",
+                CreatedDate = DateTime.Now,
+                UpdatedBy = "admin",
+                UpdatedDate = DateTime.Now
+            };
+
+            bool isSuccess = this._supplierRepository.Insert(newSupplier);
+            if (isSuccess == false)
+            {
+                return StatusCode(500, new ErrorViewModel
+                {
+                    ErrorCode = "500",
+                    ErrorMessage = "Có lỗi trong quá trình cập nhật dữ liệu."
+                });
+            }
+
+            return Ok(newSupplier);
+        }
     }
 }

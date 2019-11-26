@@ -63,5 +63,19 @@ namespace ShopApi.Repositories
                 return false;
             }
         }
+
+        public bool Insert(Supplier supplier)
+        {
+            try
+            {
+                this._context.Suppliers.Add(supplier);
+                int rowEffected = this._context.SaveChanges();
+                return rowEffected == 1;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }
