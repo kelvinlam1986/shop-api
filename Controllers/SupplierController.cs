@@ -24,11 +24,11 @@ namespace ShopApi.Controllers
             this._mapper = mapper;
         }
 
-        [HttpGet("")]
+        [HttpPost("search")]
         [Authorize]
-        public IActionResult GetAll(int branchId, string keyword = "", int page = 0, int pageSize = 20)
+        public IActionResult GetAll([FromBody]SupplierSearchDTO searchItem)
         {
-            if (branchId == 0)
+            if (searchItem.BranchId == 0)
             {
                 return BadRequest(new ErrorViewModel
                 {
@@ -37,17 +37,25 @@ namespace ShopApi.Controllers
                 });
             }
 
+            if (searchItem.PageSize == 0)
+            {
+                searchItem.PageSize = 20;
+            }
+
             int totalRow = 0;
-            var suppliers = this._supplierRepository.GetAll(branchId,
-                keyword, page, pageSize, out totalRow);
+            var suppliers = this._supplierRepository.GetAll(
+                searchItem.BranchId,
+                searchItem.Keyword,
+                searchItem.Page,
+                searchItem.PageSize, out totalRow);
 
             var suppliersVm =
                this._mapper.Map<IEnumerable<Supplier>, IEnumerable<SupplierViewModel>>(suppliers);
             var pagingVm = new PaginationSet<SupplierViewModel>();
             pagingVm.Items = suppliersVm;
-            pagingVm.Page = page;
+            pagingVm.Page = searchItem.Page;
             pagingVm.TotalCount = totalRow;
-            pagingVm.TotalPage = (int)Math.Ceiling(((decimal)totalRow / pageSize));
+            pagingVm.TotalPage = (int)Math.Ceiling(((decimal)totalRow / searchItem.PageSize));
             pagingVm.MaxPage = pagingVm.TotalPage - 1;
             return Ok(pagingVm);
         }
