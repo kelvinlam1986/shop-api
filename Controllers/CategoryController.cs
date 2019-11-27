@@ -4,7 +4,6 @@ using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using ShopApi.Infrastructure.Core;
 using ShopApi.Models;
 using ShopApi.Repositories;
@@ -28,20 +27,27 @@ namespace ShopApi.Controllers
             this._mapper = mapper;
         }
 
-        [HttpGet("")]
+        [HttpPost("search")]
         [Authorize]
-        public IActionResult GetAll(string keyword = "", int page = 0, int pageSize = 20)
+        public IActionResult GetAll([FromBody]SearchDTO searchItem)
         {
+            if (searchItem.PageSize == 0)
+            {
+                searchItem.PageSize = 20;
+            }
+
             int totalRow = 0;
             var categories = this._categoryRepository.GetAll(
-                keyword, page, pageSize, out totalRow);
+                searchItem.Keyword,
+                searchItem.Page,
+                searchItem.PageSize, out totalRow);
             var categoriesVm =
                 this._mapper.Map<IEnumerable<Category>, IEnumerable<CategoryViewModel>>(categories);
             var pagingVm = new PaginationSet<CategoryViewModel>();
             pagingVm.Items = categoriesVm;
-            pagingVm.Page = page;
+            pagingVm.Page = searchItem.Page;
             pagingVm.TotalCount = totalRow;
-            pagingVm.TotalPage = (int)Math.Ceiling(((decimal)totalRow / pageSize));
+            pagingVm.TotalPage = (int)Math.Ceiling(((decimal)totalRow / searchItem.PageSize));
             pagingVm.MaxPage = pagingVm.TotalPage - 1;
             return Ok(pagingVm);
         }
