@@ -26,7 +26,7 @@ namespace ShopApi.Controllers
 
         [HttpPost("search")]
         [Authorize]
-        public IActionResult GetAll([FromBody]SupplierSearchDTO searchItem)
+        public IActionResult GetAll([FromBody]SearchDTO searchItem)
         {
             if (searchItem.BranchId == 0)
             {

@@ -1,6 +1,6 @@
 namespace ShopApi.ViewModels
 {
-    public class SupplierSearchDTO
+    public class SearchDTO
     {
         public int BranchId { get; set; }
         public string Keyword { get; set; }
