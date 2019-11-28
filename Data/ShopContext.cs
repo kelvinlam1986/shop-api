@@ -13,6 +13,7 @@ namespace ShopApi.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<PurchaseInvoice> PurchaseInvoices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -51,6 +52,7 @@ namespace ShopApi.Data
                .HasMaxLength(255));
             builder.Entity<IdentityRoleClaim<string>>(entity => entity.Property(m => m.RoleId)
                .HasMaxLength(255));
+            builder.Entity<PurchaseInvoice>().HasIndex(x => x.InvoiceId).IsUnique();
         }
 
     }
