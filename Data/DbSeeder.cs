@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ShopApi.Models;
+using ShopApi.Repositories;
 
 namespace ShopApi.Data
 {
@@ -234,8 +235,77 @@ namespace ShopApi.Data
                 await this._dbContext.SaveChangesAsync();
             }
 
-        }
+            if (await this._dbContext.PurchaseInvoices.CountAsync() == 0)
+            {
+                var supplier = await this._dbContext.Suppliers.FirstOrDefaultAsync();
+                var branch = await this._dbContext.Branches.FirstOrDefaultAsync();
 
+                this._dbContext.PurchaseInvoices.Add(new PurchaseInvoice
+                {
+                    InvoiceId = "PIV0001",
+                    InvoiceDate = DateTime.Now,
+                    InvoiceTypeId = "001",
+                    SupplierId = supplier.Id,
+                    CurrencyId = "VND",
+                    ExchangeRate = 1,
+                    InvoiceStatus = 0,
+                    DescriptionInVietNamese = "Nhập hàng",
+                    CreatedBy = "admin",
+                    CreatedDate = DateTime.Now,
+                    UpdatedBy = "admin",
+                    UpdatedDate = DateTime.Now,
+                    BranchId = branch.Id
+                });
+
+                await this._dbContext.SaveChangesAsync();
+            }
+
+            if (await this._dbContext.PurchaseInvoices.CountAsync() > 0)
+            {
+                if (await this._dbContext.PurchaseInvoiceDetails.CountAsync() == 0)
+                {
+                    var purchaseInvoice = await this._dbContext.PurchaseInvoices.FirstOrDefaultAsync();
+                    var product = await this._dbContext.Products.FirstOrDefaultAsync();
+                    var branch = await this._dbContext.Branches.FirstOrDefaultAsync();
+
+                    this._dbContext.PurchaseInvoiceDetails.Add(new PurchaseInvoiceDetail
+                    {
+                        InvoiceSystemId = purchaseInvoice.Id,
+                        InvoiceId = purchaseInvoice.InvoiceId,
+                        OrdinalNumber = 1,
+                        ProductId = product.Id,
+                        Quantity = 2,
+                        Price = 50000,
+                        VATRate = 10,
+                        ImportTaxtRate = 1,
+                        CreatedBy = "admin",
+                        CreatedDate = DateTime.Now,
+                        UpdatedBy = "admin",
+                        UpdatedDate = DateTime.Now,
+                        BranchId = branch.Id,
+                    });
+
+                    this._dbContext.PurchaseInvoiceDetails.Add(new PurchaseInvoiceDetail
+                    {
+                        InvoiceSystemId = purchaseInvoice.Id,
+                        InvoiceId = purchaseInvoice.InvoiceId,
+                        OrdinalNumber = 2,
+                        ProductId = product.Id,
+                        Quantity = 1,
+                        Price = 50000,
+                        VATRate = 10,
+                        ImportTaxtRate = 1,
+                        CreatedBy = "admin",
+                        CreatedDate = DateTime.Now,
+                        UpdatedBy = "admin",
+                        UpdatedDate = DateTime.Now,
+                        BranchId = branch.Id,
+                    });
+
+                    await this._dbContext.SaveChangesAsync();
+                }
+            }
+        }
         private async Task CreateUserAsync()
         {
             // local variables
@@ -291,5 +361,7 @@ namespace ShopApi.Data
 #endif
             await this._dbContext.SaveChangesAsync();
         }
+
+
     }
 }

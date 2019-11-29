@@ -39,7 +39,7 @@ namespace ShopApi.Models
 
         [Required]
         [Column(Order = 7)]
-        public bool InvoiceStatus { get; set; }
+        public int InvoiceStatus { get; set; }
 
         [Required]
         [Column(Order = 8, TypeName = "nvarchar(150)")]
