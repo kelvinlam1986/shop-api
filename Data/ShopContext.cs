@@ -15,6 +15,21 @@ namespace ShopApi.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<PurchaseInvoice> PurchaseInvoices { get; set; }
         public DbSet<PurchaseInvoiceDetail> PurchaseInvoiceDetails { get; set; }
+        public DbSet<Bank> Banks { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
+        public DbSet<CustomerType> CustomerTypes { get; set; }
+        public DbSet<ExportType> ExportTypes { get; set; }
+        public DbSet<ImportType> ImportTypes { get; set; }
+        public DbSet<AutomaticValue> AutomaticValues { get; set; }
+        public DbSet<PaymentType> PaymentTypes { get; set; }
+        public DbSet<Province> Provinces { get; set; }
+        public DbSet<PurchaseInvoiceType> PurchaseInvoiceTypes { get; set; }
+        public DbSet<ReceiptType> ReceiptTypes { get; set; }
+        public DbSet<Report> Reports { get; set; }
+        public DbSet<SalesInvoiceType> SalesInvoiceTypes { get; set; }
+        public DbSet<Stock> Stocks { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

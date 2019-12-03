@@ -68,6 +68,7 @@ namespace ShopApi
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ISupplierRepository, SupplierRepository>();
+            services.AddScoped<IPurchaseInvoiceRepository, PurchaseInvoiceRepository>();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -83,6 +84,7 @@ namespace ShopApi
                     .ForMember(x => x.SupplierName, opt => opt.MapFrom(x => x.Supplier.Name));
                 cfg.CreateMap<Supplier, SupplierSelectionViewModel>();
                 cfg.CreateMap<Supplier, SupplierViewModel>();
+                cfg.CreateMap<PurchaseInvoiceQuery, PurchaseInvoiceViewModel>();
             });
 
             // Add ApplicationDbContext's DbSeeder
