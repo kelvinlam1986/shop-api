@@ -26,7 +26,8 @@ namespace ShopApi.Repositories
             IQueryable<Bank> query = null;
             if (!string.IsNullOrEmpty(keyword))
             {
-                query = _context.Banks.Where(x => x.Name.Contains(keyword) ||
+                query = _context.Banks.Where(x => x.Code.Contains(keyword) ||
+                    x.Name.Contains(keyword) ||
                     x.Address.Contains(keyword));
             }
             else

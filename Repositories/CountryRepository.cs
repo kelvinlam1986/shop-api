@@ -26,7 +26,9 @@ namespace ShopApi.Repositories
             IQueryable<Country> query = null;
             if (!string.IsNullOrEmpty(keyword))
             {
-                query = _context.Countries.Where(x => x.Name.Contains(keyword));
+                query = _context.Countries.Where(
+                    x => x.Code.Contains(keyword) ||
+                    x.Name.Contains(keyword));
             }
             else
             {
