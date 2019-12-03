@@ -6,11 +6,11 @@ using ShopApi.Models;
 
 namespace ShopApi.Repositories
 {
-    public class CountryRepository : ICountryRepository
+    public class CustomerTypeRepository : ICustomerTypeRepository
     {
         private ShopContext _context;
 
-        public CountryRepository(ShopContext context)
+        public CustomerTypeRepository(ShopContext context)
         {
             this._context = context;
         }
@@ -20,19 +20,19 @@ namespace ShopApi.Repositories
             return this._context.Countries.Any(x => x.Name == name && x.Code != code);
         }
 
-        public IEnumerable<Country> GetAll(string keyword, int page, int pageSize, out int totalRow)
+        public IEnumerable<CustomerType> GetAll(string keyword, int page, int pageSize, out int totalRow)
         {
             totalRow = 0;
-            IQueryable<Country> query = null;
+            IQueryable<CustomerType> query = null;
             if (!string.IsNullOrEmpty(keyword))
             {
-                query = _context.Countries.Where(
+                query = _context.CustomerTypes.Where(
                     x => x.Code.Contains(keyword) ||
                     x.Name.Contains(keyword));
             }
             else
             {
-                query = _context.Countries;
+                query = _context.CustomerTypes;
             }
 
             totalRow = query.Count();
@@ -43,21 +43,21 @@ namespace ShopApi.Repositories
             return query.ToList();
         }
 
-        public IEnumerable<Country> GetAllWithoutPaging()
+        public IEnumerable<CustomerType> GetAllWithoutPaging()
         {
-            return this._context.Countries.OrderBy(x => x.Name).ToList();
+            return this._context.CustomerTypes.OrderBy(x => x.Name).ToList();
         }
 
-        public Country GetByCode(string code)
+        public CustomerType GetByCode(string code)
         {
-            return this._context.Countries.Find(code);
+            return this._context.CustomerTypes.Find(code);
         }
 
-        public bool Insert(Country country)
+        public bool Insert(CustomerType customerType)
         {
             try
             {
-                this._context.Countries.Add(country);
+                this._context.CustomerTypes.Add(customerType);
                 int rowEffected = this._context.SaveChanges();
                 return rowEffected == 1;
             }
@@ -67,11 +67,11 @@ namespace ShopApi.Repositories
             }
         }
 
-        public bool Update(Country country)
+        public bool Update(CustomerType customerType)
         {
             try
             {
-                this._context.Countries.Update(country);
+                this._context.CustomerTypes.Update(customerType);
                 int rowEffected = this._context.SaveChanges();
                 return rowEffected == 1;
             }
@@ -81,11 +81,11 @@ namespace ShopApi.Repositories
             }
         }
 
-        public bool Remove(Country country)
+        public bool Remove(CustomerType customerType)
         {
             try
             {
-                this._context.Countries.Remove(country);
+                this._context.CustomerTypes.Remove(customerType);
                 int rowEffected = this._context.SaveChanges();
                 return rowEffected == 1;
             }
@@ -99,13 +99,13 @@ namespace ShopApi.Repositories
         {
             try
             {
-                var country = this._context.Countries.Find(code);
-                if (country == null)
+                var customerType = this._context.CustomerTypes.Find(code);
+                if (customerType == null)
                 {
                     return false;
                 }
 
-                this._context.Countries.Remove(country);
+                this._context.CustomerTypes.Remove(customerType);
                 int rowEffected = this._context.SaveChanges();
                 return rowEffected == 1;
 

@@ -36,7 +36,7 @@ namespace ShopApi.Repositories
             }
 
             totalRow = query.Count();
-            query = query.OrderByDescending(x => x.CreatedDate)
+            query = query.OrderBy(x => x.Name)
                         .Skip(page * pageSize)
                         .Take(pageSize);
 
@@ -45,7 +45,7 @@ namespace ShopApi.Repositories
 
         public IEnumerable<Currency> GetAllWithoutPaging()
         {
-            return this._context.Currencies.ToList();
+            return this._context.Currencies.OrderBy(x => x.Name).ToList();
         }
 
         public Currency GetByCode(string code)
