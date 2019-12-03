@@ -29,6 +29,7 @@ namespace ShopApi.Data
         public DbSet<Report> Reports { get; set; }
         public DbSet<SalesInvoiceType> SalesInvoiceTypes { get; set; }
         public DbSet<Stock> Stocks { get; set; }
+        public DbSet<Manufacture> Manufactures { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
