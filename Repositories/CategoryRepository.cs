@@ -53,7 +53,6 @@ namespace ShopApi.Repositories
             {
                 return false;
             }
-
         }
         public bool Insert(Category category)
         {
