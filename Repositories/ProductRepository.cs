@@ -17,7 +17,7 @@ namespace ShopApi.Repositories
             this._context = context;
         }
 
-        public IEnumerable<Product> GetAll(int branchId, string keyword, int page, int pageSize, out int totalRow)
+        public IEnumerable<Product> GetAll(string keyword, int page, int pageSize, out int totalRow)
         {
             totalRow = 0;
             IQueryable<Product> query = null;

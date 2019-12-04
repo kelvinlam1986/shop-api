@@ -28,15 +28,6 @@ namespace ShopApi.Controllers
         [Authorize]
         public IActionResult GetAll([FromBody]SearchDTO searchItem)
         {
-            if (searchItem.BranchId == 0)
-            {
-                return BadRequest(new ErrorViewModel
-                {
-                    ErrorCode = "400",
-                    ErrorMessage = "Bạn phải cung cấp BranchId"
-                });
-            }
-
             if (searchItem.PageSize == 0)
             {
                 searchItem.PageSize = 20;
@@ -44,7 +35,6 @@ namespace ShopApi.Controllers
 
             int totalRow = 0;
             var suppliers = this._supplierRepository.GetAll(
-                searchItem.BranchId,
                 searchItem.Keyword,
                 searchItem.Page,
                 searchItem.PageSize, out totalRow);
@@ -62,18 +52,9 @@ namespace ShopApi.Controllers
 
         [HttpGet("all")]
         [Authorize]
-        public IActionResult GetAllWithoutPaging(int branchId)
+        public IActionResult GetAllWithoutPaging()
         {
-            if (branchId == 0)
-            {
-                return BadRequest(new ErrorViewModel
-                {
-                    ErrorCode = "400",
-                    ErrorMessage = "Bạn phải cung cấp BranchId"
-                });
-            }
-
-            var suppliers = this._supplierRepository.GetAllWithoutPaging(branchId);
+            var suppliers = this._supplierRepository.GetAllWithoutPaging();
             var suppliersVm = this._mapper.Map<IEnumerable<Supplier>, IEnumerable<SupplierSelectionViewModel>>(suppliers);
 
             return Ok(suppliersVm);

@@ -15,31 +15,29 @@ namespace ShopApi.Repositories
             this._context = context;
         }
 
-        public IEnumerable<Supplier> GetAllWithoutPaging(int branchId)
+        public IEnumerable<Supplier> GetAllWithoutPaging()
         {
             return this._context.Suppliers.ToList();
         }
 
-        public IEnumerable<Supplier> GetAll(int branchId, string keyword, int page, int pageSize, out int totalRow)
+        public IEnumerable<Supplier> GetAll(string keyword, int page, int pageSize, out int totalRow)
         {
-            // totalRow = 0;
-            // IQueryable<Supplier> query = null;
-            // query = this._context.Suppliers.Where(x => x.BranchId == branchId);
-            // if (!string.IsNullOrEmpty(keyword))
-            // {
-            //     query = query.Where(x => x.Name.Contains(keyword)
-            //                 || x.Address.Contains(keyword)
-            //                 || x.Contact.Contains(keyword));
-            // }
-
-            // totalRow = query.Count();
-            // query = query.OrderByDescending(x => x.CreatedDate)
-            //             .Skip(page * pageSize)
-            //             .Take(pageSize);
-
-            // return query.ToList();
             totalRow = 0;
-            return null;
+            IQueryable<Supplier> query = null;
+            query = this._context.Suppliers;
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                query = query.Where(x => x.VietnameseName.Contains(keyword)
+                            || x.OtherLanguageName.Contains(keyword)
+                            || x.Address.Contains(keyword));
+            }
+
+            totalRow = query.Count();
+            query = query.OrderByDescending(x => x.CreatedDate)
+                        .Skip(page * pageSize)
+                        .Take(pageSize);
+
+            return query.ToList();
         }
 
         public Supplier GetById(int id)
