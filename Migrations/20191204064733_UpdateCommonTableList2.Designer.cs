@@ -8,9 +8,10 @@ using ShopApi.Data;
 namespace ShopApi.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    partial class ShopContextModelSnapshot : ModelSnapshot
+    [Migration("20191204064733_UpdateCommonTableList2")]
+    partial class UpdateCommonTableList2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
@@ -767,35 +768,6 @@ namespace ShopApi.Migrations
                     b.HasIndex("SupplierId");
 
                     b.ToTable("PurchaseInvoices");
-                });
-
-            modelBuilder.Entity("ShopApi.Models.PurchaseInvoiceBatch", b =>
-                {
-                    b.Property<string>("Code")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("varchar(3)");
-
-                    b.Property<DateTime>("BatchDate");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<bool>("Status");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("UpdatedDate");
-
-                    b.HasKey("Code");
-
-                    b.ToTable("PurchaseInvoiceBatches");
                 });
 
             modelBuilder.Entity("ShopApi.Models.PurchaseInvoiceDetail", b =>

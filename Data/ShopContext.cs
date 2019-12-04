@@ -31,6 +31,8 @@ namespace ShopApi.Data
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<Manufacture> Manufactures { get; set; }
         public DbSet<ExchangeRate> ExchangeRates { get; set; }
+        public DbSet<SupplierType> SupplierTypes { get; set; }
+        public DbSet<PurchaseInvoiceBatch> PurchaseInvoiceBatches { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
