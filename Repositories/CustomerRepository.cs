@@ -19,7 +19,7 @@ namespace ShopApi.Repositories
         {
             totalRow = 0;
             IQueryable<Customer> query = null;
-            query = this._context.Customers.Where(x => x.BranchId == branchId);
+            query = this._context.Customers;
             if (!string.IsNullOrEmpty(keyword))
             {
                 query = query.Where(x => x.FirstName.Contains(keyword)

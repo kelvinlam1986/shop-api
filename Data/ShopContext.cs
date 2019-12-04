@@ -7,14 +7,10 @@ namespace ShopApi.Data
     public class ShopContext : IdentityDbContext<ApplicationUser>
     {
         public ShopContext(DbContextOptions<ShopContext> options) : base(options) { }
-
-        public DbSet<Branch> Branches { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<PurchaseInvoice> PurchaseInvoices { get; set; }
-        public DbSet<PurchaseInvoiceDetail> PurchaseInvoiceDetails { get; set; }
         public DbSet<Bank> Banks { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<Currency> Currencies { get; set; }
@@ -71,8 +67,6 @@ namespace ShopApi.Data
                .HasMaxLength(255));
             builder.Entity<IdentityRoleClaim<string>>(entity => entity.Property(m => m.RoleId)
                .HasMaxLength(255));
-            builder.Entity<PurchaseInvoice>().HasIndex(x => x.InvoiceId).IsUnique();
-            builder.Entity<PurchaseInvoiceDetail>().HasIndex(x => new { x.InvoiceId, x.OrdinalNumber }).IsUnique();
             builder.Entity<ExchangeRate>().HasKey(x => new { x.CurrencyCode, x.DateOfRate });
         }
 

@@ -63,12 +63,10 @@ namespace ShopApi
                 o.DefaultApiVersion = new ApiVersion(new DateTime(2016, 7, 1));
             });
 
-            services.AddScoped<IBranchRepository, BranchRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ISupplierRepository, SupplierRepository>();
-            services.AddScoped<IPurchaseInvoiceRepository, PurchaseInvoiceRepository>();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -76,15 +74,13 @@ namespace ShopApi
 
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<Branch, BranchViewModel>();
                 cfg.CreateMap<Category, CategoryViewModel>();
                 cfg.CreateMap<Customer, CustomerViewModel>();
                 cfg.CreateMap<Product, ProductViewModel>()
                     .ForMember(x => x.CategoryName, opt => opt.MapFrom(x => x.Category.Name))
-                    .ForMember(x => x.SupplierName, opt => opt.MapFrom(x => x.Supplier.Name));
+                    .ForMember(x => x.SupplierName, opt => opt.MapFrom(x => x.Supplier.VietnameseName));
                 cfg.CreateMap<Supplier, SupplierSelectionViewModel>();
                 cfg.CreateMap<Supplier, SupplierViewModel>();
-                cfg.CreateMap<PurchaseInvoiceQuery, PurchaseInvoiceViewModel>();
             });
 
             // Add ApplicationDbContext's DbSeeder

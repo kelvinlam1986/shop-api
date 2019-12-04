@@ -30,22 +30,6 @@ namespace ShopApi.Data
                 await CreateUserAsync();
             }
 
-            if (await this._dbContext.Branches.CountAsync() == 0)
-            {
-                this._dbContext.Branches.Add(new Branch
-                {
-                    Name = "My Shop",
-                    Address = "240/2 Lê Thánh Tôn P.Bến Thành Q1 TP.HCM",
-                    Contact = "090 2305 226",
-                    Skin = "skin-black",
-                    CreatedBy = "admin",
-                    CreatedDate = new DateTime(2019, 5, 16, 12, 0, 0),
-                    UpdatedBy = "admin",
-                    UpdatedDate = new DateTime(2019, 6, 16, 12, 0, 0)
-                });
-
-                await this._dbContext.SaveChangesAsync();
-            }
 
             if (await this._dbContext.Categories.CountAsync() == 0)
             {
@@ -72,7 +56,6 @@ namespace ShopApi.Data
 
             if (await this._dbContext.Customers.CountAsync() == 0)
             {
-                var branch = await this._dbContext.Branches.FirstOrDefaultAsync();
                 this._dbContext.Customers.Add(new Customer
                 {
                     FirstName = "Honeylee",
@@ -112,7 +95,6 @@ namespace ShopApi.Data
                     CreatedBy = "admin",
                     UpdatedDate = DateTime.Now,
                     UpdatedBy = "admin",
-                    BranchId = branch.Id
                 });
 
                 this._dbContext.Customers.Add(new Customer
@@ -154,45 +136,43 @@ namespace ShopApi.Data
                     CreatedDate = DateTime.Now,
                     UpdatedBy = "admin",
                     UpdatedDate = DateTime.Now,
-                    BranchId = branch.Id
                 });
 
                 await this._dbContext.SaveChangesAsync();
             }
 
-            if (await this._dbContext.Suppliers.CountAsync() == 0)
-            {
-                var branch = await this._dbContext.Branches.FirstOrDefaultAsync();
-                this._dbContext.Suppliers.Add(new Supplier
-                {
-                    Name = "Minh Hằng",
-                    Address = "143 Trần Hưng Đạo Q.1 TP.HCM",
-                    Contact = "0902305229",
-                    CreatedBy = "admin",
-                    CreatedDate = DateTime.Now,
-                    UpdatedBy = "admin",
-                    UpdatedDate = DateTime.Now,
-                    BranchId = branch.Id
-                });
+            // if (await this._dbContext.Suppliers.CountAsync() == 0)
+            // {
+            //     var branch = await this._dbContext.Branches.FirstOrDefaultAsync();
+            //     this._dbContext.Suppliers.Add(new Supplier
+            //     {
+            //         Name = "Minh Hằng",
+            //         Address = "143 Trần Hưng Đạo Q.1 TP.HCM",
+            //         Contact = "0902305229",
+            //         CreatedBy = "admin",
+            //         CreatedDate = DateTime.Now,
+            //         UpdatedBy = "admin",
+            //         UpdatedDate = DateTime.Now,
+            //         BranchId = branch.Id
+            //     });
 
-                this._dbContext.Suppliers.Add(new Supplier
-                {
-                    Name = "Thu Thủy",
-                    Address = "145 Lý Tự Trọng Q1 TP.HCM",
-                    Contact = "094967342",
-                    CreatedBy = "admin",
-                    CreatedDate = DateTime.Now,
-                    UpdatedBy = "admin",
-                    UpdatedDate = DateTime.Now,
-                    BranchId = branch.Id
-                });
+            //     this._dbContext.Suppliers.Add(new Supplier
+            //     {
+            //         Name = "Thu Thủy",
+            //         Address = "145 Lý Tự Trọng Q1 TP.HCM",
+            //         Contact = "094967342",
+            //         CreatedBy = "admin",
+            //         CreatedDate = DateTime.Now,
+            //         UpdatedBy = "admin",
+            //         UpdatedDate = DateTime.Now,
+            //         BranchId = branch.Id
+            //     });
 
-                await this._dbContext.SaveChangesAsync();
-            }
+            //     await this._dbContext.SaveChangesAsync();
+            // }
 
             if (await this._dbContext.Products.CountAsync() == 0)
             {
-                var branch = await this._dbContext.Branches.FirstOrDefaultAsync();
                 var category = await this._dbContext.Categories.FirstOrDefaultAsync();
                 var supplier = await this._dbContext.Suppliers.FirstOrDefaultAsync();
 
@@ -211,7 +191,6 @@ namespace ShopApi.Data
                     CreatedDate = DateTime.Now,
                     UpdatedBy = "admin",
                     UpdatedDate = DateTime.Now,
-                    BranchId = branch.Id
                 });
 
                 this._dbContext.Products.Add(new Product
@@ -229,82 +208,11 @@ namespace ShopApi.Data
                     CreatedDate = DateTime.Now,
                     UpdatedBy = "admin",
                     UpdatedDate = DateTime.Now,
-                    BranchId = branch.Id
                 });
 
                 await this._dbContext.SaveChangesAsync();
             }
 
-            if (await this._dbContext.PurchaseInvoices.CountAsync() == 0)
-            {
-                var supplier = await this._dbContext.Suppliers.FirstOrDefaultAsync();
-                var branch = await this._dbContext.Branches.FirstOrDefaultAsync();
-
-                this._dbContext.PurchaseInvoices.Add(new PurchaseInvoice
-                {
-                    InvoiceId = "PIV0001",
-                    InvoiceDate = DateTime.Now,
-                    InvoiceTypeId = "001",
-                    SupplierId = supplier.Id,
-                    CurrencyId = "VND",
-                    ExchangeRate = 1,
-                    InvoiceStatus = 0,
-                    DescriptionInVietNamese = "Nhập hàng",
-                    CreatedBy = "admin",
-                    CreatedDate = DateTime.Now,
-                    UpdatedBy = "admin",
-                    UpdatedDate = DateTime.Now,
-                    BranchId = branch.Id
-                });
-
-                await this._dbContext.SaveChangesAsync();
-            }
-
-            if (await this._dbContext.PurchaseInvoices.CountAsync() > 0)
-            {
-                if (await this._dbContext.PurchaseInvoiceDetails.CountAsync() == 0)
-                {
-                    var purchaseInvoice = await this._dbContext.PurchaseInvoices.FirstOrDefaultAsync();
-                    var product = await this._dbContext.Products.FirstOrDefaultAsync();
-                    var branch = await this._dbContext.Branches.FirstOrDefaultAsync();
-
-                    this._dbContext.PurchaseInvoiceDetails.Add(new PurchaseInvoiceDetail
-                    {
-                        InvoiceSystemId = purchaseInvoice.Id,
-                        InvoiceId = purchaseInvoice.InvoiceId,
-                        OrdinalNumber = 1,
-                        ProductId = product.Id,
-                        Quantity = 2,
-                        Price = 50000,
-                        VATRate = 10,
-                        ImportTaxtRate = 1,
-                        CreatedBy = "admin",
-                        CreatedDate = DateTime.Now,
-                        UpdatedBy = "admin",
-                        UpdatedDate = DateTime.Now,
-                        BranchId = branch.Id,
-                    });
-
-                    this._dbContext.PurchaseInvoiceDetails.Add(new PurchaseInvoiceDetail
-                    {
-                        InvoiceSystemId = purchaseInvoice.Id,
-                        InvoiceId = purchaseInvoice.InvoiceId,
-                        OrdinalNumber = 2,
-                        ProductId = product.Id,
-                        Quantity = 1,
-                        Price = 50000,
-                        VATRate = 10,
-                        ImportTaxtRate = 1,
-                        CreatedBy = "admin",
-                        CreatedDate = DateTime.Now,
-                        UpdatedBy = "admin",
-                        UpdatedDate = DateTime.Now,
-                        BranchId = branch.Id,
-                    });
-
-                    await this._dbContext.SaveChangesAsync();
-                }
-            }
         }
         private async Task CreateUserAsync()
         {

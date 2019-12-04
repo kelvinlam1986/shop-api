@@ -23,7 +23,7 @@ namespace ShopApi.Repositories
             IQueryable<Product> query = null;
             query = this._context.Products
                 .Include(x => x.Supplier)
-                .Include(x => x.Category).Where(x => x.BranchId == branchId);
+                .Include(x => x.Category); ;
             if (!string.IsNullOrEmpty(keyword))
             {
                 query = query.Where(x => x.Name.Contains(keyword)

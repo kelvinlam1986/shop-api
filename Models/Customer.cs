@@ -118,12 +118,5 @@ namespace ShopApi.Models
 
         [Column(Order = 37)]
         public DateTime UpdatedDate { get; set; }
-
-        [Column(Order = 38)]
-        [Required]
-        public int BranchId { get; set; }
-
-        [ForeignKey(nameof(BranchId))]
-        public Branch Branch { get; set; }
     }
 }

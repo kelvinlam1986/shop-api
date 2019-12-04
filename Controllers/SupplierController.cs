@@ -124,9 +124,9 @@ namespace ShopApi.Controllers
                 });
             }
 
-            supplierToUpdate.Name = supplier.Name;
+            //supplierToUpdate.Name = supplier.Name;
             supplierToUpdate.Address = supplier.Address;
-            supplierToUpdate.Contact = supplier.Contact;
+            // supplierToUpdate.Contact = supplier.Contact;
             supplierToUpdate.UpdatedBy = "admin";
             supplierToUpdate.UpdatedDate = DateTime.Now;
 
@@ -179,10 +179,10 @@ namespace ShopApi.Controllers
 
             var newSupplier = new Supplier
             {
-                Name = supplier.Name,
+                // Name = supplier.Name,
                 Address = supplier.Address,
-                Contact = supplier.Contact,
-                BranchId = supplier.BranchId,
+                // Contact = supplier.Contact,
+                // BranchId = supplier.BranchId,
                 CreatedBy = "admin",
                 CreatedDate = DateTime.Now,
                 UpdatedBy = "admin",

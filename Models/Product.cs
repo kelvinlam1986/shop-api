@@ -38,13 +38,6 @@ namespace ShopApi.Models
         public int Quantity { get; set; }
 
         [Required]
-        [Column(Order = 7)]
-        public int BranchId { get; set; }
-
-        [ForeignKey(nameof(BranchId))]
-        public Branch Branch { get; set; }
-
-        [Required]
         [Column(Order = 8)]
         public int ReOrder { get; set; }
 

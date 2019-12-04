@@ -8,8 +8,8 @@ using ShopApi.Data;
 namespace ShopApi.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    [Migration("20191203065432_InitCommonTables")]
-    partial class InitCommonTables
+    [Migration("20191204082854_ReninitalSchema")]
+    partial class ReninitalSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -236,42 +236,6 @@ namespace ShopApi.Migrations
                     b.ToTable("Banks");
                 });
 
-            modelBuilder.Entity("ShopApi.Models.Branch", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Contact")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Skin")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("UpdatedDate");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Branch");
-                });
-
             modelBuilder.Entity("ShopApi.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -359,8 +323,6 @@ namespace ShopApi.Migrations
                         .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime>("BirthDate");
-
-                    b.Property<int>("BranchId");
 
                     b.Property<bool>("Cedula");
 
@@ -461,8 +423,6 @@ namespace ShopApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BranchId");
-
                     b.ToTable("Customers");
                 });
 
@@ -489,6 +449,33 @@ namespace ShopApi.Migrations
                     b.HasKey("Code");
 
                     b.ToTable("CustomerTypes");
+                });
+
+            modelBuilder.Entity("ShopApi.Models.ExchangeRate", b =>
+                {
+                    b.Property<string>("CurrencyCode")
+                        .HasColumnType("char(3)");
+
+                    b.Property<DateTime>("DateOfRate");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<bool>("Discontinued");
+
+                    b.Property<decimal>("Rate")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.HasKey("CurrencyCode", "DateOfRate");
+
+                    b.ToTable("ExchangeRates");
                 });
 
             modelBuilder.Entity("ShopApi.Models.ExportType", b =>
@@ -541,6 +528,43 @@ namespace ShopApi.Migrations
                     b.ToTable("ImportTypes");
                 });
 
+            modelBuilder.Entity("ShopApi.Models.Manufacture", b =>
+                {
+                    b.Property<string>("Code")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(5)");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CountryId")
+                        .IsRequired()
+                        .HasColumnType("char(3)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<DateTime>("DueDate");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.HasKey("Code");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("Manufactures");
+                });
+
             modelBuilder.Entity("ShopApi.Models.PaymentType", b =>
                 {
                     b.Property<string>("Code")
@@ -570,8 +594,6 @@ namespace ShopApi.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<int>("BranchId");
 
                     b.Property<int>("CategoryId");
 
@@ -612,8 +634,6 @@ namespace ShopApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BranchId");
-
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("SupplierId");
@@ -652,111 +672,33 @@ namespace ShopApi.Migrations
                     b.ToTable("Provinces");
                 });
 
-            modelBuilder.Entity("ShopApi.Models.PurchaseInvoice", b =>
+            modelBuilder.Entity("ShopApi.Models.PurchaseInvoiceBatch", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("Code")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(3)");
 
-                    b.Property<int>("BranchId");
+                    b.Property<DateTime>("BatchDate");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<string>("CurrencyId")
-                        .IsRequired()
-                        .HasColumnType("varchar(3)");
-
-                    b.Property<string>("DescriptionInVietNamese")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<decimal>("ExchangeRate")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<DateTime>("InvoiceDate");
-
-                    b.Property<string>("InvoiceId")
-                        .IsRequired()
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<int>("InvoiceStatus");
-
-                    b.Property<string>("InvoiceTypeId")
-                        .IsRequired()
-                        .HasColumnType("varchar(3)");
-
-                    b.Property<int>("SupplierId");
+                    b.Property<bool>("Status");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("UpdatedDate");
 
-                    b.HasKey("Id");
+                    b.HasKey("Code");
 
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("InvoiceId")
-                        .IsUnique();
-
-                    b.HasIndex("SupplierId");
-
-                    b.ToTable("PurchaseInvoices");
-                });
-
-            modelBuilder.Entity("ShopApi.Models.PurchaseInvoiceDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("BranchId");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<decimal>("ImportTaxtRate")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<string>("InvoiceId")
-                        .IsRequired()
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<int>("InvoiceSystemId");
-
-                    b.Property<int>("OrdinalNumber");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<int>("ProductId");
-
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("UpdatedDate");
-
-                    b.Property<decimal>("VATRate")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("InvoiceSystemId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("InvoiceId", "OrdinalNumber")
-                        .IsUnique();
-
-                    b.ToTable("PurchaseInvoiceDetails");
+                    b.ToTable("PurchaseInvoiceBatches");
                 });
 
             modelBuilder.Entity("ShopApi.Models.PurchaseInvoiceType", b =>
@@ -892,11 +834,72 @@ namespace ShopApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<int>("BranchId");
-
-                    b.Property<string>("Contact")
+                    b.Property<string>("Code")
                         .IsRequired()
+                        .HasColumnType("char(5)");
+
+                    b.Property<string>("ContactName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ContactTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<bool>("Discontinued");
+
+                    b.Property<DateTime>("DueDate");
+
+                    b.Property<string>("EmailAddress")
                         .HasColumnType("varchar(50)");
+
+                    b.Property<string>("FaxNumber")
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<decimal>("MaxDebitAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("OtherLanguageName")
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("ProvinceCode")
+                        .HasColumnType("char(3)");
+
+                    b.Property<string>("SupplierTypeCode")
+                        .IsRequired()
+                        .HasColumnType("char(3)");
+
+                    b.Property<string>("Telephone")
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<string>("VietnameseName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProvinceCode");
+
+                    b.HasIndex("SupplierTypeCode");
+
+                    b.ToTable("Suppliers");
+                });
+
+            modelBuilder.Entity("ShopApi.Models.SupplierType", b =>
+                {
+                    b.Property<string>("Code")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(3)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(50)");
@@ -905,18 +908,16 @@ namespace ShopApi.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("UpdatedDate");
 
-                    b.HasKey("Id");
+                    b.HasKey("Code");
 
-                    b.HasIndex("BranchId");
-
-                    b.ToTable("Suppliers");
+                    b.ToTable("SupplierTypes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
@@ -956,21 +957,24 @@ namespace ShopApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("ShopApi.Models.Customer", b =>
+            modelBuilder.Entity("ShopApi.Models.ExchangeRate", b =>
                 {
-                    b.HasOne("ShopApi.Models.Branch", "Branch")
+                    b.HasOne("ShopApi.Models.Currency", "Currency")
                         .WithMany()
-                        .HasForeignKey("BranchId")
+                        .HasForeignKey("CurrencyCode")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ShopApi.Models.Manufacture", b =>
+                {
+                    b.HasOne("ShopApi.Models.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ShopApi.Models.Product", b =>
                 {
-                    b.HasOne("ShopApi.Models.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("ShopApi.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
@@ -990,42 +994,15 @@ namespace ShopApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("ShopApi.Models.PurchaseInvoice", b =>
-                {
-                    b.HasOne("ShopApi.Models.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ShopApi.Models.Supplier", "Supplier")
-                        .WithMany()
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ShopApi.Models.PurchaseInvoiceDetail", b =>
-                {
-                    b.HasOne("ShopApi.Models.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ShopApi.Models.PurchaseInvoice", "Invoice")
-                        .WithMany()
-                        .HasForeignKey("InvoiceSystemId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ShopApi.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("ShopApi.Models.Supplier", b =>
                 {
-                    b.HasOne("ShopApi.Models.Branch", "Branch")
+                    b.HasOne("ShopApi.Models.Province", "Province")
                         .WithMany()
-                        .HasForeignKey("BranchId")
+                        .HasForeignKey("ProvinceCode");
+
+                    b.HasOne("ShopApi.Models.SupplierType", "SupplierType")
+                        .WithMany()
+                        .HasForeignKey("SupplierTypeCode")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
         }
