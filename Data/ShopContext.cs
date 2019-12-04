@@ -30,6 +30,7 @@ namespace ShopApi.Data
         public DbSet<SalesInvoiceType> SalesInvoiceTypes { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<Manufacture> Manufactures { get; set; }
+        public DbSet<ExchangeRate> ExchangeRates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -70,6 +71,7 @@ namespace ShopApi.Data
                .HasMaxLength(255));
             builder.Entity<PurchaseInvoice>().HasIndex(x => x.InvoiceId).IsUnique();
             builder.Entity<PurchaseInvoiceDetail>().HasIndex(x => new { x.InvoiceId, x.OrdinalNumber }).IsUnique();
+            builder.Entity<ExchangeRate>().HasKey(x => new { x.CurrencyCode, x.DateOfRate });
         }
 
     }

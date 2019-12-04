@@ -6,14 +6,12 @@ namespace ShopApi.Models
 {
     public class ExchangeRate
     {
-        [Key]
         [Column(Order = 1, TypeName = "char(3)")]
         public string CurrencyCode { get; set; }
 
         [ForeignKey(nameof(CurrencyCode))]
         public Currency Currency { get; set; }
 
-        [Key]
         [Column(Order = 2)]
         public DateTime DateOfRate { get; set; }
 
