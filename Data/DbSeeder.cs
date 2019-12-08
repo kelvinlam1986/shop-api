@@ -30,6 +30,33 @@ namespace ShopApi.Data
                 await CreateUserAsync();
             }
 
+            if (await this._dbContext.Banks.CountAsync() == 0)
+            {
+                this._dbContext.Banks.Add(new Bank
+                {
+                    Code = "001",
+                    Name = "Ngân hàng Đông Á",
+                    Address = "120 Lý Tự Trọng P. Bến Thành Q1 TP.HCM",
+                    CreatedBy = "admin",
+                    CreatedDate = new DateTime(2019, 12, 8, 12, 0, 0),
+                    UpdatedBy = "admin",
+                    UpdatedDate = new DateTime(2019, 12, 8, 12, 0, 0)
+                });
+
+                this._dbContext.Banks.Add(new Bank
+                {
+                    Code = "002",
+                    Name = "Ngân hàng BIDV",
+                    Address = "140 Trần Hưng Đạo P. Bến Nghé Q1 TP.HCM",
+                    CreatedBy = "admin",
+                    CreatedDate = new DateTime(2019, 12, 8, 12, 0, 0),
+                    UpdatedBy = "admin",
+                    UpdatedDate = new DateTime(2019, 12, 8, 12, 0, 0)
+                });
+
+                await this._dbContext.SaveChangesAsync();
+            }
+
 
             // if (await this._dbContext.Categories.CountAsync() == 0)
             // {
