@@ -51,5 +51,74 @@ namespace ShopApi.Controllers
             return Ok(pagingVm);
         }
 
+        [HttpPost("")]
+        [Authorize]
+        public IActionResult Post([FromBody]BankAddDTO bank)
+        {
+            if (bank == null)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Thông tin cung cấp không chính xác."
+                });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var errorViewModel = new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = ModelState.ToErrorMessages()
+                };
+
+                return BadRequest(errorViewModel);
+            }
+
+            bool isExisting = this._bankRepository.CheckExistingCode(bank.Code);
+            if (isExisting)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Mã ngân hàng này đã tồn tại."
+                });
+            }
+
+            isExisting = this._bankRepository.CheckExistingName("", bank.Name);
+            if (isExisting)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Tên ngân hàng này đã tồn tại."
+                });
+
+            }
+
+            var newBank = new Bank
+            {
+                Code = bank.Code,
+                Name = bank.Name,
+                Address = bank.Address,
+                CreatedBy = "admin",
+                CreatedDate = DateTime.Now,
+                UpdatedBy = "admin",
+                UpdatedDate = DateTime.Now
+            };
+
+            bool isSuccess = this._bankRepository.Insert(newBank);
+            if (isSuccess == false)
+            {
+                return StatusCode(500, new ErrorViewModel
+                {
+                    ErrorCode = "500",
+                    ErrorMessage = "Có lỗi trong quá trình cập nhật dữ liệu."
+                });
+            }
+
+            return Ok(newBank);
+        }
+
     }
 }

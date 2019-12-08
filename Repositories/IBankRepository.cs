@@ -11,7 +11,8 @@ namespace ShopApi.Repositories
         bool Insert(Bank bank);
         bool Remove(Bank bank);
         bool RemoveByCode(string code);
-        bool CheckExisting(string code, string name);
+        bool CheckExistingName(string code, string name);
+        bool CheckExistingCode(string code);
         IEnumerable<Bank> GetAllWithoutPaging();
     }
 }

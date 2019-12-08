@@ -15,9 +15,14 @@ namespace ShopApi.Repositories
             this._context = context;
         }
 
-        public bool CheckExisting(string code, string name)
+        public bool CheckExistingName(string code, string name)
         {
             return this._context.Banks.Any(x => x.Name == name && x.Code != code);
+        }
+
+        public bool CheckExistingCode(string code)
+        {
+            return this._context.Banks.Any(x => x.Code == code);
         }
 
         public IEnumerable<Bank> GetAll(string keyword, int page, int pageSize, out int totalRow)
