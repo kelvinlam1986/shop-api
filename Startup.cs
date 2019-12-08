@@ -67,6 +67,7 @@ namespace ShopApi
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ISupplierRepository, SupplierRepository>();
+            services.AddScoped<IBankRepository, BankRepository>();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
