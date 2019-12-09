@@ -120,5 +120,67 @@ namespace ShopApi.Controllers
             return Ok(newBank);
         }
 
+        [HttpPut("")]
+        [Authorize]
+        public IActionResult Put([FromBody]BankUpdateDTO bank)
+        {
+            if (bank == null)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Thông tin cung cấp không chính xác."
+                });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var errorViewModel = new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = ModelState.ToErrorMessages()
+                };
+
+                return BadRequest(errorViewModel);
+            }
+
+            var bankToUpdate = this._bankRepository.GetByCode(bank.Code);
+            if (bankToUpdate == null)
+            {
+                return NotFound(new ErrorViewModel
+                {
+                    ErrorCode = "404",
+                    ErrorMessage = "Ngân hàng cần cập nhật không tìm thấy"
+                });
+            }
+
+            bool isExisting = this._bankRepository.CheckExistingName(
+                bank.Code, bank.Name);
+            if (isExisting)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Tên ngân hàng này đã tồn tại."
+                });
+            }
+
+            bankToUpdate.Name = bank.Name;
+            bankToUpdate.Address = bank.Address;
+            bankToUpdate.UpdatedBy = "admin";
+            bankToUpdate.UpdatedDate = DateTime.Now;
+
+            bool isSuccess = this._bankRepository.Update(bankToUpdate);
+            if (isSuccess == false)
+            {
+                return StatusCode(500, new ErrorViewModel
+                {
+                    ErrorCode = "500",
+                    ErrorMessage = "Có lỗi trong quá trình cập nhật dữ liệu."
+                });
+            }
+
+            return Ok(bankToUpdate);
+        }
     }
 }
