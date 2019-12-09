@@ -182,5 +182,52 @@ namespace ShopApi.Controllers
 
             return Ok(bankToUpdate);
         }
+
+        [HttpDelete("")]
+        [Authorize]
+        public IActionResult Delete([FromBody]BankDeleteDTO bank)
+        {
+            if (bank == null)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Thông tin cung cấp không chính xác."
+                });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var errorViewModel = new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = ModelState.ToErrorMessages()
+                };
+
+                return BadRequest(errorViewModel);
+            }
+
+            var bankToDelete = this._bankRepository.GetByCode(bank.Code);
+            if (bankToDelete == null)
+            {
+                return NotFound(new ErrorViewModel
+                {
+                    ErrorCode = "404",
+                    ErrorMessage = "Ngân hàng cần xóa không tìm thấy"
+                });
+            }
+
+            bool isSuccess = this._bankRepository.Remove(bankToDelete);
+            if (isSuccess == false)
+            {
+                return StatusCode(500, new ErrorViewModel
+                {
+                    ErrorCode = "500",
+                    ErrorMessage = "Có lỗi trong quá trình cập nhật dữ liệu."
+                });
+            }
+
+            return Ok(bankToDelete);
+        }
     }
 }
