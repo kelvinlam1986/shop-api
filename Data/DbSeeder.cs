@@ -57,6 +57,41 @@ namespace ShopApi.Data
                 await this._dbContext.SaveChangesAsync();
             }
 
+            if (await this._dbContext.Countries.CountAsync() == 0)
+            {
+                this._dbContext.Countries.Add(new Country
+                {
+                    Code = "VN",
+                    Name = "Việt Nam",
+                    CreatedBy = "admin",
+                    CreatedDate = new DateTime(2019, 12, 8, 12, 0, 0),
+                    UpdatedBy = "admin",
+                    UpdatedDate = new DateTime(2019, 12, 8, 12, 0, 0)
+                });
+
+                this._dbContext.Countries.Add(new Country
+                {
+                    Code = "EN",
+                    Name = "Anh Quốc",
+                    CreatedBy = "admin",
+                    CreatedDate = new DateTime(2019, 12, 8, 12, 0, 0),
+                    UpdatedBy = "admin",
+                    UpdatedDate = new DateTime(2019, 12, 8, 12, 0, 0)
+                });
+
+                this._dbContext.Countries.Add(new Country
+                {
+                    Code = "US",
+                    Name = "Mỹ",
+                    CreatedBy = "admin",
+                    CreatedDate = new DateTime(2019, 12, 8, 12, 0, 0),
+                    UpdatedBy = "admin",
+                    UpdatedDate = new DateTime(2019, 12, 8, 12, 0, 0)
+                });
+
+                await this._dbContext.SaveChangesAsync();
+            }
+
 
             // if (await this._dbContext.Categories.CountAsync() == 0)
             // {

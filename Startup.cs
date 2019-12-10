@@ -68,6 +68,7 @@ namespace ShopApi
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ISupplierRepository, SupplierRepository>();
             services.AddScoped<IBankRepository, BankRepository>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -83,6 +84,7 @@ namespace ShopApi
                 cfg.CreateMap<Supplier, SupplierSelectionViewModel>();
                 cfg.CreateMap<Supplier, SupplierViewModel>();
                 cfg.CreateMap<Bank, BankViewModel>();
+                cfg.CreateMap<Country, CountryViewModel>();
             });
 
             // Add ApplicationDbContext's DbSeeder
