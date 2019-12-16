@@ -20,6 +20,11 @@ namespace ShopApi.Repositories
             return this._context.Countries.Any(x => x.Name == name && x.Code != code);
         }
 
+        public bool CheckExistingCode(string code)
+        {
+            return this._context.Countries.Any(x => x.Code == code);
+        }
+
         public IEnumerable<Country> GetAll(string keyword, int page, int pageSize, out int totalRow)
         {
             totalRow = 0;

@@ -12,6 +12,7 @@ namespace ShopApi.Repositories
         bool Remove(Country country);
         bool RemoveByCode(string code);
         bool CheckExistingName(string code, string name);
+        bool CheckExistingCode(string code);
         IEnumerable<Country> GetAllWithoutPaging();
     }
 }
