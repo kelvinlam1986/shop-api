@@ -50,5 +50,67 @@ namespace ShopApi.Controllers
             pagingVm.MaxPage = pagingVm.TotalPage - 1;
             return Ok(pagingVm);
         }
+
+        [HttpPut("")]
+        [Authorize]
+        public IActionResult Put([FromBody]CountryUpdateDTO country)
+        {
+            if (country == null)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Thông tin cung cấp không chính xác"
+                });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var errorViewModel = new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = ModelState.ToErrorMessages()
+                };
+
+                return BadRequest(errorViewModel);
+            }
+
+            var countryToUpdate = this._countryRepository.GetByCode(country.Code);
+            if (countryToUpdate == null)
+            {
+                return NotFound(new ErrorViewModel
+                {
+                    ErrorCode = "404",
+                    ErrorMessage = "Quốc gia cần cập nhật không tìm thấy"
+                });
+            }
+
+            bool isExisting = this._countryRepository.CheckExistingName(
+                country.Code, country.Name);
+            if (isExisting)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Tên quốc gia này đã tồn tại."
+                });
+            }
+
+            countryToUpdate.Name = country.Name;
+            countryToUpdate.UpdatedBy = "admin";
+            countryToUpdate.UpdatedDate = DateTime.Now;
+
+            bool isSuccess = this._countryRepository.Update(countryToUpdate);
+            if (isSuccess == false)
+            {
+                return StatusCode(500, new ErrorViewModel
+                {
+                    ErrorCode = "500",
+                    ErrorMessage = "Có lỗi trong quá trình cập nhật dữ liệu."
+                });
+            }
+
+            return Ok(countryToUpdate);
+        }
     }
 }

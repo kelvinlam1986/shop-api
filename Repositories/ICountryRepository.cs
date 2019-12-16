@@ -11,7 +11,7 @@ namespace ShopApi.Repositories
         bool Insert(Country country);
         bool Remove(Country country);
         bool RemoveByCode(string code);
-        bool CheckExisting(string code, string name);
+        bool CheckExistingName(string code, string name);
         IEnumerable<Country> GetAllWithoutPaging();
     }
 }

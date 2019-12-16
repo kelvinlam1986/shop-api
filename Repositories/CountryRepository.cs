@@ -15,7 +15,7 @@ namespace ShopApi.Repositories
             this._context = context;
         }
 
-        public bool CheckExisting(string code, string name)
+        public bool CheckExistingName(string code, string name)
         {
             return this._context.Countries.Any(x => x.Name == name && x.Code != code);
         }
