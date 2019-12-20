@@ -179,5 +179,52 @@ namespace ShopApi.Controllers
 
             return Ok(newCountry);
         }
+
+        [HttpDelete("")]
+        [Authorize]
+        public IActionResult Delete([FromBody]CountryDeleteDTO country)
+        {
+            if (country == null)
+            {
+                return BadRequest(new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = "Thông tin cung cấp không chính xác."
+                });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var errorViewModel = new ErrorViewModel
+                {
+                    ErrorCode = "400",
+                    ErrorMessage = ModelState.ToErrorMessages()
+                };
+
+                return BadRequest(errorViewModel);
+            }
+
+            var countryToDelete = this._countryRepository.GetByCode(country.Code);
+            if (countryToDelete == null)
+            {
+                return NotFound(new ErrorViewModel
+                {
+                    ErrorCode = "404",
+                    ErrorMessage = "Quốc gia cần xóa không tìm thấy"
+                });
+            }
+
+            bool isSuccess = this._countryRepository.Remove(countryToDelete);
+            if (isSuccess == false)
+            {
+                return StatusCode(500, new ErrorViewModel
+                {
+                    ErrorCode = "500",
+                    ErrorMessage = "Có lỗi trong quá trình cập nhật dữ liệu."
+                });
+            }
+
+            return Ok(countryToDelete);
+        }
     }
 }
