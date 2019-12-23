@@ -5,6 +5,7 @@ namespace ShopApi.ViewModels
     public class BankUpdateDTO
     {
         [Required(ErrorMessage = "Mã ngân hàng cần được cung cấp.")]
+        [StringLength(3, ErrorMessage = "Mã ngân hàng tối đa 3 ký tự")]
         public string Code { get; set; }
 
         [Required(ErrorMessage = "Tên ngân hàng cần được cung cấp.")]
